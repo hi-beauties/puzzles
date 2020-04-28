@@ -3,6 +3,9 @@
 #几个参考的源码链接：
 https://blog.csdn.net/qq_44651842/article/details/89366251
 https://blog.csdn.net/igolang/article/details/8225359
+https://cloud.tencent.com/developer/article/1575172
+https://blog.csdn.net/qq_39687901/article/details/80794695
+
 #作业要求：
 编写一个GUI程序，实现一个消去类或滑块类游戏。要求：
 （1）本作业分组完成，每组人数不超过3人。只需要组长上传文件，文件中说明分组和组内分工的情况，组员的学号和姓名信息。原则上应有人负责界面美工（可以有一定的音效），有人负责游戏逻辑，有人负责文档测试等。
