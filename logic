@@ -1,0 +1,84 @@
+import sys,random
+from PyQt5.QtWidgets import*
+from PyQt5.QtGui import*
+from PyQt5.QtCore import*
+
+SIZE=100
+class blockwin(QWidget):
+    finished=pyqtSignal()
+
+    def __init__(self):
+        super(blockwin, self).__init__()
+        self.resize(SIZE*3, SIZE*3)
+        self.move(100, 100)
+        self.setWindowTitle("拼图游戏")
+        self.blocks=list(range(9))
+        self.shuffleButton=QPushButton('打乱',self)
+        self.shuffleButton.clicked.connect(self.shuffle)
+        self.finished.connect(self.win)
+
+
+    def paintEvent(self, event):
+        qp = QPainter()
+        qp.begin(self)
+        pen=QPen(Qt.black,2,Qt.SolidLine)
+        font=QFont()
+        font.setPixelSize(64)
+        qp.setPen(pen)
+        qp.setFont(font)
+        for i in range(3):
+            for j in range(3):
+                loca=i*3+j
+                if self.blocks[loca]!=0:
+                    x=SIZE*j
+                    y=SIZE*i
+                    qp.drawRect(x,y,SIZE,SIZE)
+                    qp.drawText(x,y,SIZE,SIZE,Qt.AlignCenter,f"{self.blocks[loca]:d}")
+        
+        qp.end()
+
+    def getnum(self,i,j):
+        if 0<=i<3 and 0<=j<3:
+            loca=i*3+j
+            return self.blocks[loca]
+        else:
+            return -1
+    
+    def swap(self,i,j,m,n):
+        i1=i*3+j
+        i2=m*3+n
+        t=self.blocks[i1]
+        self.blocks[i1]=self.blocks[i2]
+        self.blocks[i2]=t
+        if self.isFinished():
+            self.finished.emit()
+        self.update()
+        
+    def mouseMoveEvent(self,evt):
+        x,y=evt.pos().x(),evt.pos().y()
+        i=int(y/SIZE)
+        j=int(x/SIZE)
+        if 0<=i<3 and 0<=j<3:
+            if self.getnum(i-1,j)==0:
+                self.swap(i,j,i-1,j)
+            elif self.getnum(i+1,j)==0:
+                self.swap(i,j,i+1,j)
+            elif self.getnum(i,j-1)==0:
+                self.swap(i,j,i,j-1)
+            elif self.getnum(i,j+1)==0:
+                self.swap(i,j,i,j+1)
+                
+    def shuffle(self):
+        random.shuffle(self.blocks)
+        self.update()
+    
+    def isFinished(self):
+        return self.blocks==[0,1,2,3,4,5,6,7,8]
+    
+    def win(self):
+        win=QMessageBox.question(self,"提示","你成功了！",QMessageBox.Ok)
+
+app = QApplication(sys.argv)
+w = blockwin()
+w.show()
+app.exec_()
