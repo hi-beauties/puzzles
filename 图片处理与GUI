@@ -1,3 +1,20 @@
-import random
-import pygame
-import tkinter
+from PIL import Image
+VHNUMS=3
+
+# 加载图片  
+gameImage = Image.open(r'C:\Users\19466\Desktop\source\1 5.jpg')  
+w=gameImage.width
+h=gameImage.height
+cell_w=gameImage.width/VHNUMS
+cell_h=gameImage.height/VHNUMS
+imgmap=[[0,1,2],
+        [3,4,5],
+        [6,7,8]]
+block=[ ]
+#切割与保存
+for y in range(3):
+    for x in range(3):
+        i=imgmap[y][x]
+        box=(x*cell_w,y*cell_h,(x+1)*cell_w,(y+1)*cell_h)
+        cuts=gameImage.crop(box)
+        cuts.save("C:\\Users\\19466\\Desktop\\source\\cuts\\"+str(i)+".jpg")
